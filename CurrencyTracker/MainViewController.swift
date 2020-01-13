@@ -10,7 +10,13 @@ import UIKit
 
 class MainViewController: UIViewController {
     
-    let cellID = "cellID"
+    var currencies = [CurrencyModel]()
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        print("is this being called")
+        return .lightContent
+    }
+    
     private var indexOfCellBeforeDragging = 0
     
     lazy var collectionView : UICollectionView = {
@@ -24,7 +30,7 @@ class MainViewController: UIViewController {
         cv.backgroundColor = .clear
         cv.delegate = self
         cv.dataSource = self
-        cv.register(CryptoCell.self, forCellWithReuseIdentifier: cellID)
+        cv.register(CryptoCell.self, forCellWithReuseIdentifier: CryptoCell.cellID)
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()
@@ -32,14 +38,28 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+        makeNetworkCalls()
         setupView()
         setupCollectionView()
+        
+        self.collectionView.reloadData()
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+    private func makeNetworkCalls(){
+        let currencyStrings = ["bitcoin", "ethereum", "ripple", "litecoin"]
+        currencyStrings.forEach { (currencyName) in
+            NetworkManager.shared.getPrice(for: currencyName) { (root, error) in
+                guard let root = root else {
+                    print(error)
+                    return
+                }
+                let currency = CurrencyModel(name: root.name, price: root.marketData.currentPrice.usd)
+                self.currencies.append(currency)
+                print("success")
+            }
+        }
     }
+    
     
     func setupCollectionView(){
         view.addSubview(collectionView)
@@ -66,7 +86,11 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! CryptoCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CryptoCell.cellID, for: indexPath) as! CryptoCell
+        if currencies.count == 4 {
+            cell.nameLabel.text = currencies[indexPath.item].name
+            cell.priceLabel.text = String(currencies[indexPath.item].marketData.currentPrice.usd)
+        }
         return cell
     }
 

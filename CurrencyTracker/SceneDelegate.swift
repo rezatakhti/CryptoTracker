@@ -20,27 +20,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow()
-        
         window?.rootViewController = createNVController()
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
-
     }
     
     
     func createNVController() -> UINavigationController{
         let rootViewController = MainViewController()
-        let navigationController = UINavigationController(rootViewController: rootViewController)
-        
+        let navigationController = LightContentNavigationController(rootViewController: rootViewController)
         let appearance = UINavigationBarAppearance()
         appearance.largeTitleTextAttributes = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 50, weight: .heavy), NSAttributedString.Key.foregroundColor : UIColor.white]
         appearance.backgroundColor = .black
-        
         navigationController.navigationBar.compactAppearance = appearance
         navigationController.navigationBar.standardAppearance = appearance
         navigationController.navigationBar.scrollEdgeAppearance = appearance
         navigationController.navigationBar.prefersLargeTitles = true
-        //navigationController.navigationBar.isTranslucent = false
+
         navigationController.navigationItem.largeTitleDisplayMode = .always
         return navigationController
     }
