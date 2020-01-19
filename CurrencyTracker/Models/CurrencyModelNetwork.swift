@@ -6,9 +6,14 @@
 //  Copyright © 2020 Reza Takhti. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
-struct CurrencyModel: Codable{
+struct CurrencyModelAssets {
+    var bgImage : UIImage
+    var logoIMage : UIImage
+}
+
+struct CurrencyModelNetwork: Codable{
     var name: String
     var marketData : MarketData
     

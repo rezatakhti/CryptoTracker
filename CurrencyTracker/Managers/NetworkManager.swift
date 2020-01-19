@@ -14,7 +14,7 @@ class NetworkManager {
     
     private init(){}
     
-    func getPrice(for cryptoID: String, completed: @escaping(CurrencyModel?, String?) -> Void) {
+    func getPrice(for cryptoID: String, completed: @escaping(CurrencyModelNetwork?, String?) -> Void) {
         let endpoint = baseURL + "/coins/\(cryptoID)"
         
         guard let url = URL(string: endpoint) else {
@@ -39,7 +39,7 @@ class NetworkManager {
             
             do {
                 let decoder = JSONDecoder()
-                let priceData = try decoder.decode(CurrencyModel.self, from: data)
+                let priceData = try decoder.decode(CurrencyModelNetwork.self, from: data)
                 completed(priceData, nil)
             } catch {
                 completed(nil, "The data received from the server was invalid. Please try again.")
