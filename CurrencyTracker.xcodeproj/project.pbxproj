@@ -16,6 +16,8 @@
 		6C1DEC5823D3DDC200F80130 /* CurrencyEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1DEC5723D3DDC200F80130 /* CurrencyEnums.swift */; };
 		6C1DEC5A23D419A800F80130 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1DEC5923D419A800F80130 /* DetailsViewController.swift */; };
 		6C1DEC5D23D42D0100F80130 /* LightContentNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1DEC5C23D42D0000F80130 /* LightContentNavigationController.swift */; };
+		6C1DEC6023DD561C00F80130 /* DateHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1DEC5F23DD561C00F80130 /* DateHeader.swift */; };
+		6C1DEC6223DD5CE900F80130 /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1DEC6123DD5CE900F80130 /* UIViewController+Ext.swift */; };
 		6C28A91723C18B6B00124967 /* CryptoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C28A91623C18B6B00124967 /* CryptoCell.swift */; };
 		6C89A43B23CC395C00430B20 /* CurrencyModelNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C89A43A23CC395C00430B20 /* CurrencyModelNetwork.swift */; };
 		6CC6E76E23C5B4F5001E4F39 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC6E76D23C5B4F5001E4F39 /* NetworkManager.swift */; };
@@ -33,6 +35,8 @@
 		6C1DEC5723D3DDC200F80130 /* CurrencyEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyEnums.swift; sourceTree = "<group>"; };
 		6C1DEC5923D419A800F80130 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		6C1DEC5C23D42D0000F80130 /* LightContentNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LightContentNavigationController.swift; sourceTree = "<group>"; };
+		6C1DEC5F23DD561C00F80130 /* DateHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHeader.swift; sourceTree = "<group>"; };
+		6C1DEC6123DD5CE900F80130 /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
 		6C28A91623C18B6B00124967 /* CryptoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoCell.swift; sourceTree = "<group>"; };
 		6C89A43A23CC395C00430B20 /* CurrencyModelNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyModelNetwork.swift; sourceTree = "<group>"; };
 		6CC6E76D23C5B4F5001E4F39 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -52,6 +56,7 @@
 		6C00F7DD23BC064D001A72CE = {
 			isa = PBXGroup;
 			children = (
+				6C1DEC6123DD5CE900F80130 /* UIViewController+Ext.swift */,
 				6C00F7E823BC064D001A72CE /* CurrencyTracker */,
 				6C00F7E723BC064D001A72CE /* Products */,
 			);
@@ -95,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				6C00F7ED23BC064D001A72CE /* MainViewController.swift */,
+				6C1DEC5F23DD561C00F80130 /* DateHeader.swift */,
 				6C1DEC5C23D42D0000F80130 /* LightContentNavigationController.swift */,
 				6C1DEC5923D419A800F80130 /* DetailsViewController.swift */,
 			);
@@ -189,6 +195,7 @@
 			files = (
 				6C00F7EE23BC064D001A72CE /* MainViewController.swift in Sources */,
 				6C89A43B23CC395C00430B20 /* CurrencyModelNetwork.swift in Sources */,
+				6C1DEC6223DD5CE900F80130 /* UIViewController+Ext.swift in Sources */,
 				6C00F7EA23BC064D001A72CE /* AppDelegate.swift in Sources */,
 				6C1DEC5823D3DDC200F80130 /* CurrencyEnums.swift in Sources */,
 				6C1DEC5D23D42D0100F80130 /* LightContentNavigationController.swift in Sources */,
@@ -196,6 +203,7 @@
 				6CC6E76E23C5B4F5001E4F39 /* NetworkManager.swift in Sources */,
 				6C00F7EC23BC064D001A72CE /* SceneDelegate.swift in Sources */,
 				6C00F7F423BC064D001A72CE /* CurrencyTracker.xcdatamodeld in Sources */,
+				6C1DEC6023DD561C00F80130 /* DateHeader.swift in Sources */,
 				6C1DEC5A23D419A800F80130 /* DetailsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

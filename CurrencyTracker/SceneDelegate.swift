@@ -20,27 +20,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow()
-        window?.rootViewController = createNVController()
+        window?.rootViewController = MainViewController()
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
     }
     
     
-    func createNVController() -> UINavigationController{
-        let rootViewController = MainViewController()
-        let navigationController = LightContentNavigationController(rootViewController: rootViewController)
-        let appearance = UINavigationBarAppearance()
-        appearance.largeTitleTextAttributes = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 50, weight: .heavy), NSAttributedString.Key.foregroundColor : UIColor.white]
-        appearance.backgroundColor = .black
-        navigationController.navigationBar.compactAppearance = appearance
-        navigationController.navigationBar.standardAppearance = appearance
-        navigationController.navigationBar.scrollEdgeAppearance = appearance
-        navigationController.navigationBar.prefersLargeTitles = true
-
-        navigationController.navigationItem.largeTitleDisplayMode = .always
-        return navigationController
-    }
-
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.

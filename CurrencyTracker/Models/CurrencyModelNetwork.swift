@@ -8,11 +8,6 @@
 
 import UIKit
 
-struct CurrencyModelAssets {
-    var bgImage : UIImage
-    var logoIMage : UIImage
-}
-
 struct CurrencyModelNetwork: Codable{
     var name: String
     var marketData : MarketData

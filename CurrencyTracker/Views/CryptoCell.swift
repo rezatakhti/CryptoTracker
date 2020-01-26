@@ -10,18 +10,32 @@ import UIKit
 class CryptoCell: UICollectionViewCell {
     static let cellID = "cellID"
     
-    let logoImageView : UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "bitcoinLogo"))
-        iv.contentMode = .scaleAspectFit
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        return iv
-    }()
+    override var isHighlighted: Bool{
+        didSet {
+            shrink(down: isHighlighted)
+        }
+    }
     
     let BGImageView : UIImageView = {
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "BitcoinBG"))
+        let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 20
+        imageView.contentMode = .center
+        imageView.layer.contentsRect = CGRect(x: 0.0, y: 0.2, width: 1, height: 1)
+        imageView.layer.masksToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
+    }()
+    
+    let darkOverlay : UIView = {
+        let view = UIView()
+        //view.backgroundColor = UIColor(red: 212/255, green: 175/255, blue: 55/255, alpha: 1)
+        view.layer.cornerRadius = 20
+        view.layer.masksToBounds = true
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.alpha = 0.2
+        return view
     }()
     
     let priceLabel : UILabel = {
@@ -29,7 +43,7 @@ class CryptoCell: UICollectionViewCell {
         label.text = "$"
         label.textColor = .white
         label.adjustsFontSizeToFitWidth = true
-        label.font = UIFont(name: "KohinoorTelugu-Medium", size: 40)
+        label.font = UIFont(name: "KohinoorTelugu-Medium", size: 25)
         label.textAlignment = .right
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -38,10 +52,10 @@ class CryptoCell: UICollectionViewCell {
     
     let nameLabel : UILabel = {
         let label = UILabel()
-        label.text = "Bitcoin"
+        label.text = ""
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 50, weight: .light)
-        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 50, weight: .heavy)
+        label.textAlignment = .right
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -51,29 +65,44 @@ class CryptoCell: UICollectionViewCell {
         setupConstraints()
     }
     
-    public func set(withAssets assets: CurrencyModelAssets, networkData data: CurrencyModelNetwork){
-        self.logoImageView.image = assets.logoIMage
-        self.BGImageView.image = assets.bgImage
-        
+    public func set(networkData data: CurrencyModelNetwork){
+        switch data.name{
+        case "Bitcoin":
+            BGImageView.image = #imageLiteral(resourceName: "Bitcoin")
+        case "Ethereum":
+            BGImageView.image = #imageLiteral(resourceName: "Ethereum")
+        case "Litecoin":
+            BGImageView.image = #imageLiteral(resourceName: "LiteCoin")
+        case "XRP":
+            BGImageView.image = #imageLiteral(resourceName: "Ripple")
+        default:
+            break
+        }
         self.nameLabel.text = data.name
         self.priceLabel.text = "$" + String(data.marketData.currentPrice.usd)
-        
-        if self.nameLabel.text == "XRP" {
-            priceLabel.textColor = .black
-        } else {
-            priceLabel.textColor = .white
-        }
+
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func shrink(down: Bool){
+        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: [.allowUserInteraction], animations: {
+            if down {
+                self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            } else {
+                self.transform = .identity
+            }
+        })
+        
+    }
+    
     func setupConstraints(){
         addSubview(BGImageView)
+        addSubview(darkOverlay)
         addSubview(priceLabel)
         addSubview(nameLabel)
-        addSubview(logoImageView)
         
         NSLayoutConstraint.activate([
             BGImageView.topAnchor.constraint(equalTo: topAnchor),
@@ -81,20 +110,21 @@ class CryptoCell: UICollectionViewCell {
             BGImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             BGImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
             
-            priceLabel.topAnchor.constraint(equalTo: topAnchor, constant: frame.height/10),
-            priceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
-            priceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
-            priceLabel.heightAnchor.constraint(equalToConstant: 70),
+            darkOverlay.topAnchor.constraint(equalTo: topAnchor),
+            darkOverlay.bottomAnchor.constraint(equalTo: bottomAnchor),
+            darkOverlay.leadingAnchor.constraint(equalTo: leadingAnchor),
+            darkOverlay.trailingAnchor.constraint(equalTo: trailingAnchor),
             
-            nameLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -frame.height/10),
-            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
+            nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: frame.height/15),
+            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
-            nameLabel.heightAnchor.constraint(equalToConstant: frame.height/3),
+            nameLabel.heightAnchor.constraint(equalToConstant: 40),
             
-            logoImageView.topAnchor.constraint(equalTo: topAnchor, constant: frame.height/8),
-            logoImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
-            logoImageView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.4),
-            logoImageView.widthAnchor.constraint(equalTo: heightAnchor, multiplier: 0.3),
+            priceLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor),
+            priceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            priceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
+            priceLabel.heightAnchor.constraint(equalToConstant: 25),
+
         ])
     }
 }
