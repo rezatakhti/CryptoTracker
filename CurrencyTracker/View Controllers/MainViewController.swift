@@ -12,10 +12,10 @@ protocol DetailedViewDelegate : class {
 }
 
 class MainViewController: UIViewController {
+    let transition = PopAnimator()
     
     var currencies : Array<CurrencyModelNetwork> = Array(repeating: CurrencyModelNetwork(name: "", price: 0), count: 4) {
         didSet {
-            print("potato")
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
             }
@@ -119,7 +119,10 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        let detailsViewController = DetailsViewController()
+        detailsViewController.title = currencies[indexPath.item].name
+        detailsViewController.modalPresentationStyle = .fullScreen
+        present(detailsViewController, animated: true, completion: nil)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -138,9 +141,9 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-
+        
     }
-
+    
 }
 
 extension MainViewController : UICollectionViewDelegateFlowLayout{
@@ -153,5 +156,4 @@ extension MainViewController : UICollectionViewDelegateFlowLayout{
         print(collectionView.contentOffset.y)
     }
 }
-
 

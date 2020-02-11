@@ -9,47 +9,76 @@
 import UIKit
 
 class DetailsViewController : UIViewController {
-    
     var currency = CurrencyModelNetwork(name: "", price: 0)
-    var logoImageView : UIImageView = {
-        let iv = UIImageView(image: nil)
-        iv.contentMode = .scaleAspectFit
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        return iv
+    lazy var exitButton : UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(#imageLiteral(resourceName: "CancelButton").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.backgroundColor = .bitcoin()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
-    let priceLabel : UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "KohinoorTelugu-Medium", size: 40)
-        label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .right
-        return label
-    }()
+    let logoView = LogoView()
+    let cardView = CardView()
+    let graphVC = GraphChildViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        makeNetworkCalls()
-        setupConstraints()
+       // makeNetworkCalls()
+        
+        setupViews()
+        configureGraphChildVC()
         view.backgroundColor = .white
     }
     
-    private func setupConstraints(){
-        view.addSubview(priceLabel)
-        view.addSubview(logoImageView)
+    private func configureGraphChildVC(){
+        view.addSubview(graphVC.view)
+        addChild(graphVC)
+        graphVC.didMove(toParent: self)
+        setupGraphVCConstraints()
+    }
+    
+    private func setupGraphVCConstraints(){
+        graphVC.view.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            priceLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            priceLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            priceLabel.leadingAnchor.constraint(equalTo: view.centerXAnchor),
-            priceLabel.heightAnchor.constraint(equalToConstant: 50),
-            
-            logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            logoImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            logoImageView.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -32),
-            logoImageView.heightAnchor.constraint(equalToConstant: 90),
-        
+            graphVC.view.leadingAnchor.constraint(equalTo: cardView.leadingAnchor),
+            graphVC.view.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
+            graphVC.view.heightAnchor.constraint(equalTo: cardView.heightAnchor, multiplier: 0.5),
+            graphVC.view.centerYAnchor.constraint(equalTo: cardView.centerYAnchor)
         ])
+        
+    }
+    
+    private func setupViews(){
+        view.addSubview(logoView)
+        view.addSubview(cardView)
+        view.addSubview(exitButton)
+        
+        logoView.set(logoImage: #imageLiteral(resourceName: "BitcoinBG"), title: CurrencyEnums.Bitcoin.rawValue)
+        
+        NSLayoutConstraint.activate([
+            logoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            logoView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            logoView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
+            logoView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1),
+            
+            cardView.topAnchor.constraint(equalTo: logoView.bottomAnchor, constant: 16),
+            cardView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            cardView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            cardView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.7),
+            
+            exitButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            exitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            exitButton.widthAnchor.constraint(equalToConstant: 45),
+            exitButton.heightAnchor.constraint(equalTo: exitButton.widthAnchor),
+            
+        ])
+        
+        self.view.layoutIfNeeded()
+        exitButton.layer.cornerRadius = 0.5 * exitButton.frame.width
+        exitButton.layer.masksToBounds = true
+        
     }
     
     private func makeNetworkCalls(){
@@ -77,7 +106,7 @@ class DetailsViewController : UIViewController {
             
             self.currency = CurrencyModelNetwork(name: root.name, price: root.marketData.currentPrice.usd)
             DispatchQueue.main.async {
-            self.priceLabel.text = "$" + String(self.currency.marketData.currentPrice.usd)
+               // self.priceLabel.text = "$" + String(self.currency.marketData.currentPrice.usd)
             }
             
             
@@ -87,6 +116,8 @@ class DetailsViewController : UIViewController {
 
 extension DetailsViewController : DetailedViewDelegate {
     func didSendLogoImage(logoImage: UIImage) {
-        self.logoImageView.image = logoImage
+        //self.logoImageView.image = logoImage
     }
 }
+
+

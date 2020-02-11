@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4883A1321F1A881748EB7C8B /* Pods_CurrencyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CCA5A81D5EB12C86E9A2E8D /* Pods_CurrencyTracker.framework */; };
 		6C00F7EA23BC064D001A72CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C00F7E923BC064D001A72CE /* AppDelegate.swift */; };
 		6C00F7EC23BC064D001A72CE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C00F7EB23BC064D001A72CE /* SceneDelegate.swift */; };
 		6C00F7EE23BC064D001A72CE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C00F7ED23BC064D001A72CE /* MainViewController.swift */; };
@@ -15,10 +16,14 @@
 		6C00F7F923BC0651001A72CE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C00F7F723BC0651001A72CE /* LaunchScreen.storyboard */; };
 		6C1DEC5823D3DDC200F80130 /* CurrencyEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1DEC5723D3DDC200F80130 /* CurrencyEnums.swift */; };
 		6C1DEC5A23D419A800F80130 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1DEC5923D419A800F80130 /* DetailsViewController.swift */; };
-		6C1DEC5D23D42D0100F80130 /* LightContentNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1DEC5C23D42D0000F80130 /* LightContentNavigationController.swift */; };
 		6C1DEC6023DD561C00F80130 /* DateHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1DEC5F23DD561C00F80130 /* DateHeader.swift */; };
 		6C1DEC6223DD5CE900F80130 /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1DEC6123DD5CE900F80130 /* UIViewController+Ext.swift */; };
+		6C1DEC6423E1564D00F80130 /* PopAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1DEC6323E1564D00F80130 /* PopAnimator.swift */; };
 		6C28A91723C18B6B00124967 /* CryptoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C28A91623C18B6B00124967 /* CryptoCell.swift */; };
+		6C74AFD923EFC2C4004B777C /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C74AFD823EFC2C4004B777C /* CardView.swift */; };
+		6C74AFDB23EFC30B004B777C /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C74AFDA23EFC30B004B777C /* LogoView.swift */; };
+		6C74AFDD23EFC696004B777C /* UIColor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C74AFDC23EFC696004B777C /* UIColor+Ext.swift */; };
+		6C74AFE423F28580004B777C /* GraphChildViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C74AFE323F28580004B777C /* GraphChildViewController.swift */; };
 		6C89A43B23CC395C00430B20 /* CurrencyModelNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C89A43A23CC395C00430B20 /* CurrencyModelNetwork.swift */; };
 		6CC6E76E23C5B4F5001E4F39 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC6E76D23C5B4F5001E4F39 /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
@@ -34,12 +39,19 @@
 		6C00F7FA23BC0651001A72CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C1DEC5723D3DDC200F80130 /* CurrencyEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyEnums.swift; sourceTree = "<group>"; };
 		6C1DEC5923D419A800F80130 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
-		6C1DEC5C23D42D0000F80130 /* LightContentNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LightContentNavigationController.swift; sourceTree = "<group>"; };
 		6C1DEC5F23DD561C00F80130 /* DateHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHeader.swift; sourceTree = "<group>"; };
 		6C1DEC6123DD5CE900F80130 /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
+		6C1DEC6323E1564D00F80130 /* PopAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopAnimator.swift; sourceTree = "<group>"; };
 		6C28A91623C18B6B00124967 /* CryptoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoCell.swift; sourceTree = "<group>"; };
+		6C74AFD823EFC2C4004B777C /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		6C74AFDA23EFC30B004B777C /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
+		6C74AFDC23EFC696004B777C /* UIColor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
+		6C74AFE323F28580004B777C /* GraphChildViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphChildViewController.swift; sourceTree = "<group>"; };
 		6C89A43A23CC395C00430B20 /* CurrencyModelNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyModelNetwork.swift; sourceTree = "<group>"; };
 		6CC6E76D23C5B4F5001E4F39 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		8BAE517601BFB6D5EA3C0949 /* Pods-CurrencyTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CurrencyTracker.debug.xcconfig"; path = "Target Support Files/Pods-CurrencyTracker/Pods-CurrencyTracker.debug.xcconfig"; sourceTree = "<group>"; };
+		9CCA5A81D5EB12C86E9A2E8D /* Pods_CurrencyTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CurrencyTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E41A1E05E463E73EF5A0A825 /* Pods-CurrencyTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CurrencyTracker.release.xcconfig"; path = "Target Support Files/Pods-CurrencyTracker/Pods-CurrencyTracker.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,18 +59,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4883A1321F1A881748EB7C8B /* Pods_CurrencyTracker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A977F1C9C880D12DD766AFE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8BAE517601BFB6D5EA3C0949 /* Pods-CurrencyTracker.debug.xcconfig */,
+				E41A1E05E463E73EF5A0A825 /* Pods-CurrencyTracker.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		6C00F7DD23BC064D001A72CE = {
 			isa = PBXGroup;
 			children = (
-				6C1DEC6123DD5CE900F80130 /* UIViewController+Ext.swift */,
 				6C00F7E823BC064D001A72CE /* CurrencyTracker */,
 				6C00F7E723BC064D001A72CE /* Products */,
+				0A977F1C9C880D12DD766AFE /* Pods */,
+				BD441B42097F0F52DD95E77F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -76,10 +99,10 @@
 				6C00F7E923BC064D001A72CE /* AppDelegate.swift */,
 				6C00F7EB23BC064D001A72CE /* SceneDelegate.swift */,
 				6C1DEC5E23D42D0E00F80130 /* View Controllers */,
-				6C1DEC5723D3DDC200F80130 /* CurrencyEnums.swift */,
 				6C1DEC5B23D42CCA00F80130 /* Views */,
 				6CC6E77123C67A43001E4F39 /* Managers */,
 				6C76016F23CBCB18004C2F7D /* Models */,
+				6C74AFE223F27EEA004B777C /* ExtensionsAndUtilities */,
 				6C00F7F523BC0651001A72CE /* Assets.xcassets */,
 				6C00F7F723BC0651001A72CE /* LaunchScreen.storyboard */,
 				6C00F7FA23BC0651001A72CE /* Info.plist */,
@@ -91,6 +114,9 @@
 		6C1DEC5B23D42CCA00F80130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6C74AFD823EFC2C4004B777C /* CardView.swift */,
+				6C74AFDA23EFC30B004B777C /* LogoView.swift */,
+				6C1DEC5F23DD561C00F80130 /* DateHeader.swift */,
 				6C28A91623C18B6B00124967 /* CryptoCell.swift */,
 			);
 			path = Views;
@@ -100,16 +126,25 @@
 			isa = PBXGroup;
 			children = (
 				6C00F7ED23BC064D001A72CE /* MainViewController.swift */,
-				6C1DEC5F23DD561C00F80130 /* DateHeader.swift */,
-				6C1DEC5C23D42D0000F80130 /* LightContentNavigationController.swift */,
 				6C1DEC5923D419A800F80130 /* DetailsViewController.swift */,
+				6C74AFE323F28580004B777C /* GraphChildViewController.swift */,
 			);
 			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		6C74AFE223F27EEA004B777C /* ExtensionsAndUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				6C1DEC6123DD5CE900F80130 /* UIViewController+Ext.swift */,
+				6C74AFDC23EFC696004B777C /* UIColor+Ext.swift */,
+			);
+			path = ExtensionsAndUtilities;
 			sourceTree = "<group>";
 		};
 		6C76016F23CBCB18004C2F7D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6C1DEC5723D3DDC200F80130 /* CurrencyEnums.swift */,
 				6C89A43A23CC395C00430B20 /* CurrencyModelNetwork.swift */,
 			);
 			path = Models;
@@ -118,9 +153,18 @@
 		6CC6E77123C67A43001E4F39 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				6C1DEC6323E1564D00F80130 /* PopAnimator.swift */,
 				6CC6E76D23C5B4F5001E4F39 /* NetworkManager.swift */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		BD441B42097F0F52DD95E77F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9CCA5A81D5EB12C86E9A2E8D /* Pods_CurrencyTracker.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -130,9 +174,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6C00F7FD23BC0651001A72CE /* Build configuration list for PBXNativeTarget "CurrencyTracker" */;
 			buildPhases = (
+				B8DEC7BBF3454E590815DBFB /* [CP] Check Pods Manifest.lock */,
 				6C00F7E223BC064D001A72CE /* Sources */,
 				6C00F7E323BC064D001A72CE /* Frameworks */,
 				6C00F7E423BC064D001A72CE /* Resources */,
+				2394D20012CF096629266E42 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -188,22 +234,68 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		2394D20012CF096629266E42 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CurrencyTracker/Pods-CurrencyTracker-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CurrencyTracker/Pods-CurrencyTracker-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CurrencyTracker/Pods-CurrencyTracker-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B8DEC7BBF3454E590815DBFB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CurrencyTracker-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		6C00F7E223BC064D001A72CE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C74AFD923EFC2C4004B777C /* CardView.swift in Sources */,
 				6C00F7EE23BC064D001A72CE /* MainViewController.swift in Sources */,
 				6C89A43B23CC395C00430B20 /* CurrencyModelNetwork.swift in Sources */,
 				6C1DEC6223DD5CE900F80130 /* UIViewController+Ext.swift in Sources */,
 				6C00F7EA23BC064D001A72CE /* AppDelegate.swift in Sources */,
+				6C74AFDD23EFC696004B777C /* UIColor+Ext.swift in Sources */,
 				6C1DEC5823D3DDC200F80130 /* CurrencyEnums.swift in Sources */,
-				6C1DEC5D23D42D0100F80130 /* LightContentNavigationController.swift in Sources */,
 				6C28A91723C18B6B00124967 /* CryptoCell.swift in Sources */,
 				6CC6E76E23C5B4F5001E4F39 /* NetworkManager.swift in Sources */,
 				6C00F7EC23BC064D001A72CE /* SceneDelegate.swift in Sources */,
+				6C74AFDB23EFC30B004B777C /* LogoView.swift in Sources */,
 				6C00F7F423BC064D001A72CE /* CurrencyTracker.xcdatamodeld in Sources */,
+				6C1DEC6423E1564D00F80130 /* PopAnimator.swift in Sources */,
 				6C1DEC6023DD561C00F80130 /* DateHeader.swift in Sources */,
+				6C74AFE423F28580004B777C /* GraphChildViewController.swift in Sources */,
 				6C1DEC5A23D419A800F80130 /* DetailsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -338,6 +430,7 @@
 		};
 		6C00F7FE23BC0651001A72CE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8BAE517601BFB6D5EA3C0949 /* Pods-CurrencyTracker.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -356,6 +449,7 @@
 		};
 		6C00F7FF23BC0651001A72CE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E41A1E05E463E73EF5A0A825 /* Pods-CurrencyTracker.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

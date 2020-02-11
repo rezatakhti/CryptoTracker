@@ -21,7 +21,6 @@ class NetworkManager {
             completed(nil, "This cryptoID created an invalid request. Please try again.")
             return
         }
-        
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let _ = error {
                 completed(nil, "Unable to complete your request. Pleaes check your internet connection")
