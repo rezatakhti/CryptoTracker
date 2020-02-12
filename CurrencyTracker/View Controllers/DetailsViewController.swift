@@ -15,6 +15,7 @@ class DetailsViewController : UIViewController {
         button.setImage(#imageLiteral(resourceName: "CancelButton").withRenderingMode(.alwaysOriginal), for: .normal)
         button.backgroundColor = .bitcoin()
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(exitButtonPressed), for: .touchUpInside)
         return button
     }()
     
@@ -29,6 +30,10 @@ class DetailsViewController : UIViewController {
         setupViews()
         configureGraphChildVC()
         view.backgroundColor = .white
+    }
+    
+    @objc private func exitButtonPressed(){
+        dismiss(animated: true, completion: nil)
     }
     
     private func configureGraphChildVC(){

@@ -12,58 +12,106 @@ import Charts
 class GraphChildViewController: UIViewController {
     
     var lineChartView = LineChartView()
+    
+    var panGestureRecognizer : UIPanGestureRecognizer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupLineChartView()
+        var price = [7500.0]
         
-        let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
-        let unitsSold = [20.0, 4.0, 6.0, 3.0, 12.0, 16.0]
-        
-        setChart(dataPoints: months, values: unitsSold)
+        for _ in 0..<50 {
+            price.append(8000 + Double(arc4random_uniform(1000)))
+        }
+        setChart(values: price)
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setupLineChartView()
+        lineChartView.animate(xAxisDuration: 1, easingOption: .easeOutSine)
+    }
+    
     
     private func setupLineChartView(){
         view.addSubview(lineChartView)
         lineChartView.translatesAutoresizingMaskIntoConstraints = false
+        lineChartView.delegate = self
         NSLayoutConstraint.activate([
             lineChartView.topAnchor.constraint(equalTo: view.topAnchor),
             lineChartView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             lineChartView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             lineChartView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        
     }
     
-    private func setChart(dataPoints: [String], values: [Double]) {
+    private func setChart(values: [Double]) {
         var dataEntries: [ChartDataEntry] = []
         
-        for i in 0..<dataPoints.count {
-            let dataEntry = ChartDataEntry(x: values[i], y: Double(i))
+        for i in 0..<values.count {
+            let dataEntry = ChartDataEntry(x: Double(i), y: values[i])
             dataEntries.append(dataEntry)
         }
         
         let lineChartDataSet = LineChartDataSet(entries: dataEntries, label: "Units Sold")
         let lineChartsData = LineChartData()
         lineChartsData.addDataSet(lineChartDataSet)
-        lineChartView.data = lineChartsData
         
-        var colors: [UIColor] = []
+        lineChartDataSet.colors = [.white]
         
-        for i in 0..<dataPoints.count {
-            let red = Double(arc4random_uniform(256))
-            let green = Double(arc4random_uniform(256))
-            let blue = Double(arc4random_uniform(256))
-            
-            let color = UIColor(red: CGFloat(red/255), green: CGFloat(green/255), blue: CGFloat(blue/255), alpha: 1)
-            colors.append(color)
+        lineChartDataSet.drawCirclesEnabled = false
+        
+        let gradientColors = [UIColor.white.cgColor, UIColor.clear.cgColor]
+        let colorLocations : [CGFloat] = [1.0, 0.0]
+        guard let gradient = CGGradient.init(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: gradientColors as CFArray, locations: colorLocations) else {
+            print("error")
+            return
         }
+  
+        lineChartDataSet.fill = Fill.fillWithLinearGradient(gradient, angle: 90.0)
+        lineChartDataSet.drawFilledEnabled = true
+        lineChartDataSet.mode = .cubicBezier
+        lineChartDataSet.drawValuesEnabled = false
+        lineChartDataSet.highlightEnabled = true
+        lineChartDataSet.setDrawHighlightIndicators(true)
+        lineChartDataSet.highlightLineWidth = 1
+        lineChartDataSet.highlightColor = .white
+        lineChartDataSet.drawHorizontalHighlightIndicatorEnabled = false
+        lineChartDataSet.lineWidth = 2
+
         
-        lineChartDataSet.colors = colors
         
+        lineChartView.xAxis.drawGridLinesEnabled = false
+        lineChartView.leftAxis.drawGridLinesEnabled = false
         
+        lineChartView.legend.enabled = false
+        lineChartView.rightAxis.enabled = false
+        lineChartView.xAxis.drawLabelsEnabled = false
+        lineChartView.leftAxis.drawLabelsEnabled = false
+        lineChartView.xAxis.drawAxisLineEnabled = false
+        lineChartView.leftAxis.drawAxisLineEnabled = false
+        lineChartView.xAxis.axisLineColor = .white
+        lineChartView.leftAxis.axisLineColor = .white
+        lineChartView.leftAxis.axisLineWidth = 2
+        lineChartView.xAxis.axisLineWidth = 2
+        lineChartView.xAxis.labelPosition = .bottom
+        lineChartView.data = lineChartsData
+        lineChartView.highlightPerTapEnabled = false
+        lineChartView.highlightPerDragEnabled = true
+        lineChartView.scaleYEnabled = false
+        lineChartView.scaleXEnabled = false
     }
     
 
 
 }
+
+extension GraphChildViewController : ChartViewDelegate {
+    func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
+        print(entry.y)
+    }
+    func chartViewDidEndPanning(_ chartView: ChartViewBase) {
+        chartView.highlightValue(nil)
+    }
+}
+
+
