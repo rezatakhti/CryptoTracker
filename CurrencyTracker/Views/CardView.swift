@@ -13,7 +13,6 @@ class CardView : UIView {
     let amountLabel : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "$8239.21"
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 35, weight: .medium)
         return label
@@ -22,7 +21,6 @@ class CardView : UIView {
     let percentIncreaseLabel : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "1.21%"
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 25, weight: .medium)
 

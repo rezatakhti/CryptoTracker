@@ -27,9 +27,16 @@ class DetailsViewController : UIViewController {
         super.viewDidLoad()
        // makeNetworkCalls()
         
+        
         setupViews()
+        
         configureGraphChildVC()
         view.backgroundColor = .white
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupLogoView()
     }
     
     @objc private func exitButtonPressed(){
@@ -38,6 +45,7 @@ class DetailsViewController : UIViewController {
     
     private func configureGraphChildVC(){
         view.addSubview(graphVC.view)
+        graphVC.delegate = self
         addChild(graphVC)
         graphVC.didMove(toParent: self)
         setupGraphVCConstraints()
@@ -56,19 +64,13 @@ class DetailsViewController : UIViewController {
     }
     
     private func setupViews(){
-        view.addSubview(logoView)
         view.addSubview(cardView)
         view.addSubview(exitButton)
         
         logoView.set(logoImage: #imageLiteral(resourceName: "BitcoinBG"), title: CurrencyEnums.Bitcoin.rawValue)
         
         NSLayoutConstraint.activate([
-            logoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            logoView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            logoView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
-            logoView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1),
-            
-            cardView.topAnchor.constraint(equalTo: logoView.bottomAnchor, constant: 16),
+            cardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: (UIScreen.main.bounds.height * 0.1) + 32),
             cardView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             cardView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             cardView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.7),
@@ -84,6 +86,31 @@ class DetailsViewController : UIViewController {
         exitButton.layer.cornerRadius = 0.5 * exitButton.frame.width
         exitButton.layer.masksToBounds = true
         
+    }
+    
+    private func setupLogoView(){
+        view.addSubview(logoView)
+        view.sendSubviewToBack(logoView)
+        let topConstraint = logoView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 16)
+        
+        NSLayoutConstraint.activate([
+            logoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            topConstraint,
+            logoView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
+            logoView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1),
+        ])
+        
+        view.layoutIfNeeded()
+        view.superview?.layoutIfNeeded()
+        
+        topConstraint.isActive = false
+        logoView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16).isActive = true
+
+        
+        UIView.animate(withDuration: 0.5, delay: 0.25, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: .curveEaseOut, animations: {
+            self.view.superview?.layoutIfNeeded()
+            self.view.layoutIfNeeded()
+        }, completion: nil)
     }
     
     private func makeNetworkCalls(){
@@ -123,6 +150,25 @@ extension DetailsViewController : DetailedViewDelegate {
     func didSendLogoImage(logoImage: UIImage) {
         //self.logoImageView.image = logoImage
     }
+}
+
+extension DetailsViewController : GraphViewDelegate {
+    func calculatedPercentChange(value: Double) {
+        let percentFormatter = NumberFormatter()
+        percentFormatter.numberStyle = NumberFormatter.Style.percent
+        percentFormatter.multiplier = 1
+        percentFormatter.minimumFractionDigits = 1
+        percentFormatter.maximumFractionDigits = 2
+        let decreaseImage = #imageLiteral(resourceName: "DecreaseArrow")
+        let increaseImage = #imageLiteral(resourceName: "IncreaseArrow")
+        cardView.arrowImageView.image = value > 0 ? increaseImage : decreaseImage
+        cardView.percentIncreaseLabel.text =  percentFormatter.string(for: value)
+    }
+    
+    func amountLabelShouldChange(value: Double) {
+        cardView.amountLabel.text = String(format: "$%.02f", value)
+    }
+    
 }
 
 

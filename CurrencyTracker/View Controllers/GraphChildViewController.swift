@@ -9,20 +9,47 @@
 import UIKit
 import Charts
 
+protocol GraphViewDelegate : class {
+    func amountLabelShouldChange(value: Double)
+    func calculatedPercentChange(value: Double)
+}
+
 class GraphChildViewController: UIViewController {
     
     var lineChartView = LineChartView()
     
     var panGestureRecognizer : UIPanGestureRecognizer!
-
+    var prices = [Double]()
+    weak var delegate : GraphViewDelegate? {
+        didSet {
+            calculatePercentChange(prices: prices)
+            guard prices.count > 1 else { return }
+            delegate?.amountLabelShouldChange(value: prices.first!)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        var price = [7500.0]
+        
         
         for _ in 0..<50 {
-            price.append(8000 + Double(arc4random_uniform(1000)))
+            prices.append(8000 + Double(arc4random_uniform(1000)))
         }
-        setChart(values: price)
+        
+        
+        setChart(values: prices)
+    }
+    
+    private func calculatePercentChange(prices: [Double]){
+        guard prices.count > 1 else { return }
+        
+        let startPrice = prices.first!
+        let endPrice = prices.last!
+        
+        let percentage = endPrice / startPrice * 100
+        let calculatedPercentage = percentage > 100 ? percentage - 100 : -(100 - percentage)
+        
+        delegate?.calculatedPercentChange(value: calculatedPercentage)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -108,9 +135,16 @@ class GraphChildViewController: UIViewController {
 extension GraphChildViewController : ChartViewDelegate {
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
         print(entry.y)
+        delegate?.amountLabelShouldChange(value: entry.y)
+        guard prices.count > 1 else { return }
+        calculatePercentChange(prices:  [prices.first!, entry.y])
+       
     }
     func chartViewDidEndPanning(_ chartView: ChartViewBase) {
+        calculatePercentChange(prices: prices)
         chartView.highlightValue(nil)
+        guard prices.count > 1 else { return }
+        delegate?.amountLabelShouldChange(value: prices.last!)
     }
 }
 
