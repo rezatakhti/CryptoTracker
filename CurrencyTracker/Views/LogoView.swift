@@ -19,6 +19,7 @@ class LogoView : UIView {
     
     let titleLabel : UILabel = {
         let label = UILabel()
+        label.adjustsFontSizeToFitWidth = true
         label.font = UIFont.systemFont(ofSize: 45, weight: .heavy)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

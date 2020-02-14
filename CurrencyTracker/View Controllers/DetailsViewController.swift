@@ -9,7 +9,6 @@
 import UIKit
 
 class DetailsViewController : UIViewController {
-    var currency = CurrencyModelNetwork(name: "", price: 0)
     lazy var exitButton : UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "CancelButton").withRenderingMode(.alwaysOriginal), for: .normal)
@@ -18,18 +17,18 @@ class DetailsViewController : UIViewController {
         button.addTarget(self, action: #selector(exitButtonPressed), for: .touchUpInside)
         return button
     }()
+    private var amount : Double?
+    private var percentage : Double?
+    private var animationStartDate = Date()
     
+    var selectedCurrency : CurrencyModelNetwork?
     let logoView = LogoView()
     let cardView = CardView()
     let graphVC = GraphChildViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       // makeNetworkCalls()
-        
-        
         setupViews()
-        
         configureGraphChildVC()
         view.backgroundColor = .white
     }
@@ -37,6 +36,12 @@ class DetailsViewController : UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupLogoView()
+        animationStartDate = Date()
+        graphVC.delegate = self
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        graphVC.delegate = nil
     }
     
     @objc private func exitButtonPressed(){
@@ -45,7 +50,6 @@ class DetailsViewController : UIViewController {
     
     private func configureGraphChildVC(){
         view.addSubview(graphVC.view)
-        graphVC.delegate = self
         addChild(graphVC)
         graphVC.didMove(toParent: self)
         setupGraphVCConstraints()
@@ -68,6 +72,7 @@ class DetailsViewController : UIViewController {
         view.addSubview(exitButton)
         
         logoView.set(logoImage: #imageLiteral(resourceName: "BitcoinBG"), title: CurrencyEnums.Bitcoin.rawValue)
+        logoView.titleLabel.text = selectedCurrency?.name
         
         NSLayoutConstraint.activate([
             cardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: (UIScreen.main.bounds.height * 0.1) + 32),
@@ -112,63 +117,47 @@ class DetailsViewController : UIViewController {
             self.view.layoutIfNeeded()
         }, completion: nil)
     }
-    
-    private func makeNetworkCalls(){
-        let currencyStrings = ["bitcoin", "ethereum", "ripple", "litecoin"]
-        var currencyName = ""
-        switch title {
-        case CurrencyEnums.Bitcoin.rawValue:
-             currencyName = currencyStrings[0]
-        case CurrencyEnums.Litecoin.rawValue:
-             currencyName = currencyStrings[3]
-        case CurrencyEnums.XRP.rawValue:
-             currencyName = currencyStrings[2]
-        case CurrencyEnums.Ethereum.rawValue:
-             currencyName = currencyStrings[1]
-        default: break
-        }
-        
-        NetworkManager.shared.getPrice(for: currencyName) { [weak self](root, error) in
-            guard let self = self else { return }
-            guard let root = root else {
-                print(error)
-                return
-            }
-            print(root.name)
-            
-            self.currency = CurrencyModelNetwork(name: root.name, price: root.marketData.currentPrice.usd)
-            DispatchQueue.main.async {
-               // self.priceLabel.text = "$" + String(self.currency.marketData.currentPrice.usd)
-            }
-            
-            
-        }
-    }
-}
-
-extension DetailsViewController : DetailedViewDelegate {
-    func didSendLogoImage(logoImage: UIImage) {
-        //self.logoImageView.image = logoImage
-    }
 }
 
 extension DetailsViewController : GraphViewDelegate {
     func calculatedPercentChange(value: Double) {
-        let percentFormatter = NumberFormatter()
-        percentFormatter.numberStyle = NumberFormatter.Style.percent
-        percentFormatter.multiplier = 1
-        percentFormatter.minimumFractionDigits = 1
-        percentFormatter.maximumFractionDigits = 2
         let decreaseImage = #imageLiteral(resourceName: "DecreaseArrow")
         let increaseImage = #imageLiteral(resourceName: "IncreaseArrow")
         cardView.arrowImageView.image = value > 0 ? increaseImage : decreaseImage
-        cardView.percentIncreaseLabel.text =  percentFormatter.string(for: value)
+        percentage = value
+        cardView.percentIncreaseLabel.text =  value.percentFormatted()
     }
     
     func amountLabelShouldChange(value: Double) {
+        amount = value
         cardView.amountLabel.text = String(format: "$%.02f", value)
     }
     
+    func animateLabels(){
+        let displayLink = CADisplayLink(target: self, selector: #selector(handleUpdate))
+        displayLink.add(to: .main, forMode: .default)
+    }
+    
+    @objc private func handleUpdate(){
+        guard let amount = amount, let percentage = percentage else { return }
+        
+        let animationDuration: Double = 1
+        let now = Date()
+        let elapsedTime = now.timeIntervalSince(animationStartDate)
+        
+        if elapsedTime > animationDuration {
+            cardView.amountLabel.text = String(format: "$%.02f", amount)
+            cardView.percentIncreaseLabel.text = percentage.percentFormatted()
+        } else {
+            let percentageComplete = elapsedTime / animationDuration
+            let percentValue = percentageComplete * percentage
+            let amount = percentageComplete * amount
+            cardView.amountLabel.text = String(format: "$%.02f", amount)
+            cardView.percentIncreaseLabel.text = percentValue.percentFormatted()
+        }
+    }
+    
+  
 }
 
 

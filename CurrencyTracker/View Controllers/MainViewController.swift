@@ -7,12 +7,8 @@
 //
 
 import UIKit
-protocol DetailedViewDelegate : class {
-    func didSendLogoImage(logoImage : UIImage)
-}
 
 class MainViewController: UIViewController {
-    let transition = PopAnimator()
     
     var currencies : Array<CurrencyModelNetwork> = Array(repeating: CurrencyModelNetwork(name: "", price: 0), count: 4) {
         didSet {
@@ -21,10 +17,8 @@ class MainViewController: UIViewController {
             }
         }
     }
-    
+    let currencyStrings = ["bitcoin",  "litecoin", "ripple", "ethereum"]
     lazy var indicator = createActivityIndicator()
-    
-    weak var delegate : DetailedViewDelegate?
     
     lazy var collectionView : UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -54,7 +48,6 @@ class MainViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        indicator.startAnimating()
         makeNetworkCalls()
     }
     
@@ -63,27 +56,28 @@ class MainViewController: UIViewController {
     }
 
     private func makeNetworkCalls(){
-        let currencyStrings = ["bitcoin", "ethereum", "ripple", "litecoin"]
-        
+        indicator.startAnimating()
         currencyStrings.forEach { currencyName in
-            NetworkManager.shared.getPrice(for: currencyName) { [weak self](root, error) in
+            NetworkManager.shared.getPrice(for: currencyName) { [weak self] (result) in
                 guard let self = self else { return }
-                guard let root = root else {
-                    print(error)
-                    return
-                }
-                let currency = CurrencyModelNetwork(name: root.name, price: root.marketData.currentPrice.usd)
-                
-                switch root.name {
-                case CurrencyEnums.Bitcoin.rawValue:
-                    self.currencies[0] = currency
-                case CurrencyEnums.Litecoin.rawValue:
-                    self.currencies[1] = currency
-                case CurrencyEnums.XRP.rawValue:
-                    self.currencies[2] = currency
-                case CurrencyEnums.Ethereum.rawValue:
-                    self.currencies[3] = currency
-                default: break
+                switch result {
+                    
+                case .success(let currencyData):
+                    let currency = CurrencyModelNetwork(name: currencyData.name, price: currencyData.marketData.currentPrice.usd)
+                    
+                    switch currencyData.name {
+                    case CurrencyEnums.Bitcoin.rawValue:
+                        self.currencies[0] = currency
+                    case CurrencyEnums.Litecoin.rawValue:
+                        self.currencies[1] = currency
+                    case CurrencyEnums.XRP.rawValue:
+                        self.currencies[2] = currency
+                    case CurrencyEnums.Ethereum.rawValue:
+                        self.currencies[3] = currency
+                    default: break
+                    }
+                case .failure(let error):
+                    print(error.rawValue)
                 }
                 DispatchQueue.main.async{
                     self.collectionView.refreshControl?.endRefreshing()
@@ -120,7 +114,8 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let detailsViewController = DetailsViewController()
-        detailsViewController.title = currencies[indexPath.item].name
+        detailsViewController.selectedCurrency = currencies[indexPath.item]
+        detailsViewController.graphVC.cryptoID = currencyStrings[indexPath.item]
         detailsViewController.modalPresentationStyle = .fullScreen
         present(detailsViewController, animated: true, completion: nil)
     }
@@ -138,10 +133,6 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DateHeader.identifier, for: indexPath) as! DateHeader
         return header
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        
     }
     
 }

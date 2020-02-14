@@ -12,32 +12,58 @@ import Charts
 protocol GraphViewDelegate : class {
     func amountLabelShouldChange(value: Double)
     func calculatedPercentChange(value: Double)
+    func animateLabels()
 }
 
 class GraphChildViewController: UIViewController {
     
     var lineChartView = LineChartView()
+    var cryptoID : String?
     
     var panGestureRecognizer : UIPanGestureRecognizer!
+    var priceDictionary = [Double : Int]()
     var prices = [Double]()
-    weak var delegate : GraphViewDelegate? {
-        didSet {
-            calculatePercentChange(prices: prices)
-            guard prices.count > 1 else { return }
-            delegate?.amountLabelShouldChange(value: prices.first!)
-        }
-    }
+    weak var delegate : GraphViewDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        makeNetworkCalls()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         
-        for _ in 0..<50 {
-            prices.append(8000 + Double(arc4random_uniform(1000)))
+        view.layoutIfNeeded()
+        
+    }
+    
+    private func makeNetworkCalls(){
+        self.setupLineChartView()
+        lineChartView.addIndicator()
+        NetworkManager.shared.getHistoricalData(for: cryptoID ?? "", lengthInDays: 1) { (result) in
+            
+            switch result {
+            case .success(let historicalData):
+                print(historicalData.prices)
+                for index in (0..<historicalData.prices.count) {
+                    self.priceDictionary[historicalData.prices[index].price] = historicalData.prices[index].time
+                    self.prices.append(historicalData.prices[index].price)
+                }
+
+                DispatchQueue.main.async{
+                    print(self.prices)
+                    
+                    self.lineChartView.animate(xAxisDuration: 1, easingOption: .easeInSine)
+                    self.setChart(values: self.prices)
+                    self.calculatePercentChange(prices: self.prices)
+                    self.delegate?.amountLabelShouldChange(value: self.prices.last!)
+                    self.delegate?.animateLabels()
+                    self.lineChartView.removeIndicator()
+                }
+            case .failure(let error):
+                print(error.rawValue)
+            }
         }
-        
-        
-        setChart(values: prices)
     }
     
     private func calculatePercentChange(prices: [Double]){
@@ -52,15 +78,12 @@ class GraphChildViewController: UIViewController {
         delegate?.calculatedPercentChange(value: calculatedPercentage)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        setupLineChartView()
-        lineChartView.animate(xAxisDuration: 1, easingOption: .easeOutSine)
-    }
+    
     
     
     private func setupLineChartView(){
         view.addSubview(lineChartView)
+        lineChartView.noDataText = ""
         lineChartView.translatesAutoresizingMaskIntoConstraints = false
         lineChartView.delegate = self
         NSLayoutConstraint.activate([
@@ -93,7 +116,7 @@ class GraphChildViewController: UIViewController {
             print("error")
             return
         }
-  
+    
         lineChartDataSet.fill = Fill.fillWithLinearGradient(gradient, angle: 90.0)
         lineChartDataSet.drawFilledEnabled = true
         lineChartDataSet.mode = .cubicBezier
@@ -134,7 +157,6 @@ class GraphChildViewController: UIViewController {
 
 extension GraphChildViewController : ChartViewDelegate {
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
-        print(entry.y)
         delegate?.amountLabelShouldChange(value: entry.y)
         guard prices.count > 1 else { return }
         calculatePercentChange(prices:  [prices.first!, entry.y])
