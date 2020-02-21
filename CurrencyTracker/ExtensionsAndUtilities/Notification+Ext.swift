@@ -8,4 +8,6 @@
 
 import UIKit
 
-//class 
+extension Notification.Name {
+    static let didPressDateButton = Notification.Name(rawValue: "didPressDateButton")
+}

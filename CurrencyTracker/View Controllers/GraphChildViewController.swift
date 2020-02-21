@@ -27,32 +27,69 @@ class GraphChildViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        makeNetworkCalls()
-        
+        makeNetworkCalls(days: 1)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleButtonPressed), name: .didPressDateButton, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
         view.layoutIfNeeded()
         
     }
     
-    private func makeNetworkCalls(){
+    @objc private func handleButtonPressed(notification: Notification){
+        
+        var numOfDays = 0
+        let label = (notification.userInfo as! [String: String]).first!.value
+        switch(label){
+        case "1D":
+            numOfDays = 1
+        case "1W":
+            numOfDays = 7
+        case "1M":
+            numOfDays = 30
+        case "3M":
+            numOfDays = 90
+        case "6M":
+            numOfDays = 180
+        case "1Y":
+            numOfDays = 365
+        default:
+            numOfDays = 1
+        }
+        
+        makeNetworkCalls(days: numOfDays)
+    }
+    
+    
+    private func makeNetworkCalls(days numOfDays: Int){
+        priceDictionary = [Double : Int]()
+        prices = [Double]()
+        
         self.setupLineChartView()
         lineChartView.addIndicator()
-        NetworkManager.shared.getHistoricalData(for: cryptoID ?? "", lengthInDays: 1) { (result) in
+        NetworkManager.shared.getHistoricalData(for: cryptoID ?? "", lengthInDays: numOfDays) { (result) in
             
             switch result {
             case .success(let historicalData):
-                print(historicalData.prices)
                 for index in (0..<historicalData.prices.count) {
-                    self.priceDictionary[historicalData.prices[index].price] = historicalData.prices[index].time
-                    self.prices.append(historicalData.prices[index].price)
+                    switch numOfDays {
+
+                    case 90:
+                        if index.isMultiple(of: 4){
+                            fallthrough
+                        }
+                    case 30:
+                        if index.isMultiple(of: 2){
+                            fallthrough
+                        }
+                    default:
+                        
+                        self.priceDictionary[historicalData.prices[index].price] = historicalData.prices[index].time
+                        self.prices.append(historicalData.prices[index].price)
+                    }
                 }
 
                 DispatchQueue.main.async{
-                    print(self.prices)
-                    
                     self.lineChartView.animate(xAxisDuration: 1, easingOption: .easeInSine)
                     self.setChart(values: self.prices)
                     self.calculatePercentChange(prices: self.prices)
@@ -77,9 +114,6 @@ class GraphChildViewController: UIViewController {
         
         delegate?.calculatedPercentChange(value: calculatedPercentage)
     }
-    
-    
-    
     
     private func setupLineChartView(){
         view.addSubview(lineChartView)

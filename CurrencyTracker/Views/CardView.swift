@@ -45,8 +45,6 @@ class CardView : UIView {
         createDateButtons()
     }
     
-    
-    
     private func createDateButtons(){
         stackView = createDateStackView()
         addSubview(stackView)
@@ -69,6 +67,10 @@ class CardView : UIView {
     
     @objc private func changeSelection(button: UIButton){
         guard let stackView = stackView else { return }
+        
+        let buttonDict = ["buttonLabel" : button.titleLabel!.text]
+        
+        NotificationCenter.default.post(Notification(name: .didPressDateButton, object: nil, userInfo: buttonDict as [AnyHashable : Any]))
         
         for button in stackView.arrangedSubviews{
             button.backgroundColor = .clear

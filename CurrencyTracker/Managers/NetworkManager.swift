@@ -51,7 +51,7 @@ class NetworkManager {
     
     func getHistoricalData(for cryptoID: String, lengthInDays length: Int, completed: @escaping(Result<HistoricalData, ErrorMessage>) -> ()){
         let endpoint = baseURL + "/coins/\(cryptoID)/market_chart?vs_currency=usd&days=\(length)"
-        
+        print(length)
         guard let url = URL(string: endpoint) else {
             completed(.failure(.invalidCryptoID))
             return
