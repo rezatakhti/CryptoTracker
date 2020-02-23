@@ -61,7 +61,7 @@ class DetailsViewController : UIViewController {
         NSLayoutConstraint.activate([
             graphVC.view.leadingAnchor.constraint(equalTo: cardView.leadingAnchor),
             graphVC.view.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
-            graphVC.view.heightAnchor.constraint(equalTo: cardView.heightAnchor, multiplier: 0.5),
+            graphVC.view.heightAnchor.constraint(equalTo: cardView.heightAnchor, multiplier: 0.6),
             graphVC.view.centerYAnchor.constraint(equalTo: cardView.centerYAnchor)
         ])
         

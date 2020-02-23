@@ -23,10 +23,21 @@ class GraphChildViewController: UIViewController {
     var panGestureRecognizer : UIPanGestureRecognizer!
     var priceDictionary = [Double : Int]()
     var prices = [Double]()
+    var numOfDaysBeingDisplayed = 1
+    let dateLabel : UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .left
+        return label
+    }()
+    
     weak var delegate : GraphViewDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupFloatingLabel()
         makeNetworkCalls(days: 1)
         NotificationCenter.default.addObserver(self, selector: #selector(handleButtonPressed), name: .didPressDateButton, object: nil)
     }
@@ -36,28 +47,71 @@ class GraphChildViewController: UIViewController {
         
     }
     
+    
+    private func changeLabel(toTimeStamp timeStamp: Int, xPosition x: Double){
+        let date = Date(timeIntervalSince1970: TimeInterval(timeStamp/1000))
+        let dateFormatter = DateFormatter()
+        switch numOfDaysBeingDisplayed {
+        case 1:
+            fallthrough
+        case 7:
+            dateFormatter.dateFormat = "MMM d, hh:mm a"
+        case 30:
+            fallthrough
+        case 90:
+            fallthrough
+        case 180:
+            fallthrough
+        case 365:
+            dateFormatter.dateFormat = "MMM d, yyyy"
+        default:
+            break
+        }
+        let timeString = dateFormatter.string(from: date)
+        dateLabel.text = timeString
+        let intrinsicWidth = dateLabel.intrinsicContentSize.width/2
+        var xTransform = CGFloat(x) * (CGFloat(view.frame.width)/CGFloat(prices.count)) - intrinsicWidth
+        print(intrinsicWidth)
+        print(xTransform)
+        if (xTransform < 8) {
+            xTransform = CGFloat(8)
+        }
+        let totalWidth = CGFloat(prices.count) * (CGFloat(view.frame.width)/CGFloat(prices.count))
+        if (xTransform + dateLabel.intrinsicContentSize.width > totalWidth){
+            xTransform = totalWidth - dateLabel.intrinsicContentSize.width - 8
+        }
+        dateLabel.transform = CGAffineTransform(translationX: xTransform, y: 0)
+    }
+    
     @objc private func handleButtonPressed(notification: Notification){
-        
-        var numOfDays = 0
         let label = (notification.userInfo as! [String: String]).first!.value
         switch(label){
         case "1D":
-            numOfDays = 1
+            numOfDaysBeingDisplayed = 1
         case "1W":
-            numOfDays = 7
+            numOfDaysBeingDisplayed = 7
         case "1M":
-            numOfDays = 30
+            numOfDaysBeingDisplayed = 30
         case "3M":
-            numOfDays = 90
+            numOfDaysBeingDisplayed = 90
         case "6M":
-            numOfDays = 180
+            numOfDaysBeingDisplayed = 180
         case "1Y":
-            numOfDays = 365
+            numOfDaysBeingDisplayed = 365
         default:
-            numOfDays = 1
+            numOfDaysBeingDisplayed = 1
         }
         
-        makeNetworkCalls(days: numOfDays)
+        makeNetworkCalls(days: numOfDaysBeingDisplayed)
+    }
+    
+    private func setupFloatingLabel(){
+        view.addSubview(dateLabel)
+        
+        NSLayoutConstraint.activate([
+            dateLabel.topAnchor.constraint(equalTo: view.topAnchor),
+            dateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        ])
     }
     
     
@@ -121,7 +175,7 @@ class GraphChildViewController: UIViewController {
         lineChartView.translatesAutoresizingMaskIntoConstraints = false
         lineChartView.delegate = self
         NSLayoutConstraint.activate([
-            lineChartView.topAnchor.constraint(equalTo: view.topAnchor),
+            lineChartView.topAnchor.constraint(equalTo: view.topAnchor, constant: 32),
             lineChartView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             lineChartView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             lineChartView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -161,8 +215,6 @@ class GraphChildViewController: UIViewController {
         lineChartDataSet.highlightColor = .white
         lineChartDataSet.drawHorizontalHighlightIndicatorEnabled = false
         lineChartDataSet.lineWidth = 2
-
-        
         
         lineChartView.xAxis.drawGridLinesEnabled = false
         lineChartView.leftAxis.drawGridLinesEnabled = false
@@ -192,13 +244,16 @@ class GraphChildViewController: UIViewController {
 extension GraphChildViewController : ChartViewDelegate {
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
         delegate?.amountLabelShouldChange(value: entry.y)
+        guard let timestamp = priceDictionary[entry.y] else { return }
+        changeLabel(toTimeStamp: timestamp, xPosition: highlight.x)
         guard prices.count > 1 else { return }
         calculatePercentChange(prices:  [prices.first!, entry.y])
-       
     }
+    
     func chartViewDidEndPanning(_ chartView: ChartViewBase) {
         calculatePercentChange(prices: prices)
         chartView.highlightValue(nil)
+        dateLabel.text = ""
         guard prices.count > 1 else { return }
         delegate?.amountLabelShouldChange(value: prices.last!)
     }
